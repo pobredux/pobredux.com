@@ -1,0 +1,22 @@
+# PoB Redux
+
+> A desktop build planner for Path of Exile 1 and 2, with a new interface for Path of Building. It runs Path of Building Community's own calculation engine unchanged, so every number matches PoB. Free and open source under the MIT licence, for Windows, macOS (Apple Silicon) and Linux (x86_64 and ARM64).
+
+- Website and downloads: https://pobredux.com/
+- Source code and releases: https://github.com/pobredux/pob-redux
+- Bug reports: https://github.com/pobredux/pob-redux/issues
+- Discord: https://discord.pobredux.com/
+
+## What it does
+
+- Every Path of Building tab: tree, skills, items, calcs, config, notes, party and builds, with PoB's own tooltips and breakdowns.
+- The passive tree in the game's full-size art. Power mode shows what each node adds to damage and defences.
+- Optimize reviews a build, designs rares for chosen slots from the real mod pool, and ranks passives by what each point adds. It is a best-effort search.
+- Item crafting with each affix's tier, and a Trader with weighted searches and live listings after sign-in.
+- An optional assistant that answers questions about the open build and can change it, with Keep and Undo. It runs on the user's own Claude, ChatGPT, GitHub Copilot, Cursor, Grok, Kimi, OpenCode or Antigravity plan, or on Ollama. It can read poe2db, poedb, the two Path of Exile wikis and pathofexile.com, and asks before each lookup.
+- Imports from share codes, PoB XML, pobb.in, pob.codes, Maxroll, Mobalytics, poe.ninja, poe2db, poedb, Pastebin and Rentry, characters from a Path of Exile sign-in, and GGG planner files for Path of Exile 2.
+- Seven themes (Dark, Light, Wraeclast, Abyss, Breach, Ritual, Delirium), Path of Exile cursors, and sections you can drag into any order.
+- An optional local MCP server so Claude Code, Claude Desktop or Cursor can read and edit the open build.
+- Nine interface languages. Builds stay in the same Documents folders Path of Building uses.
+
+PoB Redux is not affiliated with Grinding Gear Games.

@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "pobredux",
+  "compatibility_date": "2026-09-11",
+  "observability": { "enabled": true },
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "routes": [{ "pattern": "pobredux.com", "custom_domain": true }]
+}
