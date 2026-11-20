@@ -24,10 +24,17 @@
           : /Linux|X11|CrOS/i.test(s) ? "linux"
           : "other";
         root.dataset.arch = /aarch64|arm64|armv8|armv7/i.test(s) ? "arm64" : "x64";
+        var t = null;
         try {
-          var t = localStorage.getItem("pobredux:theme");
-          if (t === "light" || t === "dark") root.dataset.theme = t;
+          t = localStorage.getItem("pobredux:theme");
         } catch (e) {}
+        if (t !== "system") {
+          root.dataset.theme = t === "light" ? "light" : "dark";
+          var c = t === "light" ? "#fbfaf7" : "#0b0b0c";
+          document.querySelectorAll('meta[name="theme-color"]').forEach(function (m) {
+            m.content = c;
+          });
+        }
       })();
     </script>
     %sveltekit.head%

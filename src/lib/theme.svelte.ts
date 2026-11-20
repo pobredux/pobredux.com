@@ -1,9 +1,10 @@
 export type ThemeChoice = "system" | "light" | "dark";
 
 const KEY = "pobredux:theme";
+const COLORS = { dark: "#0b0b0c", light: "#fbfaf7" };
 
 class ThemeState {
-  choice = $state<ThemeChoice>("system");
+  choice = $state<ThemeChoice>("dark");
 
   init() {
     const t = document.documentElement.dataset.theme;
@@ -20,9 +21,11 @@ class ThemeState {
     if (choice === "system") delete root.dataset.theme;
     else root.dataset.theme = choice;
     try {
-      if (choice === "system") localStorage.removeItem(KEY);
-      else localStorage.setItem(KEY, choice);
+      localStorage.setItem(KEY, choice);
     } catch {}
+    for (const m of document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]')) {
+      m.content = COLORS[choice === "system" ? (m.media.includes("light") ? "light" : "dark") : choice];
+    }
     this.choice = choice;
   }
 

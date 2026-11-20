@@ -34,7 +34,8 @@ bun run deploy     # build, then wrangler deploy
   points the download buttons at the Windows installer, the AppImage, `.deb` and `.rpm` for the visitor's
   architecture, and the macOS `.dmg`. Without JavaScript, or if the API fails, every button links to the latest
   release page.
-- The header theme switch saves Light or Dark in `localStorage` (`pobredux:theme`); System removes it. A change
+- The site starts in Dark. The header theme switch saves System, Light or Dark in `localStorage` (`pobredux:theme`);
+  only System follows the operating system. A change
   runs in a view transition through the `#theme-dissolve` SVG filter, and switches instantly with reduced motion,
   without view transition support, or when the visible theme does not change.
 - `src/routes/404` prerenders with no JavaScript. Cloudflare serves it for unknown paths (`not_found_handling` in
@@ -54,7 +55,7 @@ bun run deploy     # build, then wrangler deploy
   PNG captures named `follow-1.png`, `theory-1.png` and so on. Capture them from the app at 1520 x 960 with a
   device scale of 2. If a frame changes, check the click points and zoom boxes in `src/lib/demo.ts`.
 - `bun scripts/crops.ts <folder>` writes the `row-*` detail crops; the crop boxes are in the script.
-- `bun scripts/og.ts` renders `static/assets/og.png` with Takumi from `scripts/og-shot.jpg`.
+- `bun scripts/og.ts` renders the Open Graph cards with Takumi: `static/assets/og.png` from `scripts/og-shot.jpg`, and `og-privacy.png` and `og-code-signing.png` from `src/lib/legal.ts`. All three use a halftone of `bw-divine.png`, like the hero background.
 - `static/llms.txt` is a plain-text summary for AI search tools, and `static/sitemap.xml` lists the pages and
   screenshots. Update both when the features or the screenshots change.
 

@@ -2,6 +2,7 @@
   import Footer from "./Footer.svelte";
   import Header from "./Header.svelte";
   import RichText from "./RichText.svelte";
+  import Seo from "./Seo.svelte";
   import type { LegalPage } from "#lib/legal.js";
 
   let { page }: { page: LegalPage } = $props();
@@ -9,11 +10,13 @@
   const slug = (title: string) => `${page.path}-${title.toLowerCase().replace(/\W+/g, "-")}`;
 </script>
 
-<svelte:head>
-  <title>{page.title} · PoB Redux</title>
-  <meta name="description" content={page.description} />
-  <link rel="canonical" href="https://pobredux.com/{page.path}" />
-</svelte:head>
+<Seo
+  title="{page.title} · PoB Redux"
+  description={page.description}
+  path={page.path}
+  image="assets/og-{page.path}.png"
+  imageAlt="PoB Redux {page.title.toLowerCase()}"
+/>
 
 <Header />
 
