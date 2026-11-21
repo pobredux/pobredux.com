@@ -1,6 +1,7 @@
 <script lang="ts">
   import Icon from "./Icon.svelte";
   import { SLIDES } from "#lib/content.js";
+  import { theme } from "#lib/theme.svelte.js";
 
   let {
     open = $bindable(false),
@@ -56,7 +57,7 @@
     </div>
     <div class="body" class:actual bind:this={body}>
       <button type="button" class="img" aria-label={actual ? "Fit to window" : "Show actual size"} onclick={() => (zoom = !actual)}>
-        <img src="/assets/shots/{slide.id}.webp" alt={slide.alt} width="1840" height="1162" />
+        <img src="/assets/shots/{theme.isLight ? 'light/' : ''}{slide.id}.webp" alt={slide.alt} width="1840" height="1162" />
       </button>
     </div>
   {/if}

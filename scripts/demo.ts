@@ -4,9 +4,11 @@ import { mkdirSync, readdirSync } from "node:fs";
 import { basename, join } from "node:path";
 import sharp from "sharp";
 
-const src = process.argv[2];
-if (!src) throw new Error("usage: bun scripts/demo.ts <capture folder>");
-const out = join(import.meta.dir, "..", "static", "assets", "demo");
+const args = process.argv.slice(2);
+const light = args.includes("--light");
+const src = args.find((a) => !a.startsWith("-"));
+if (!src) throw new Error("usage: bun scripts/demo.ts <capture folder> [--light]");
+const out = join(import.meta.dir, "..", "static", "assets", "demo", ...(light ? ["light"] : []));
 mkdirSync(out, { recursive: true });
 
 for (const file of readdirSync(src).filter((f) => f.endsWith(".png"))) {

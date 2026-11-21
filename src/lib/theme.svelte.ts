@@ -5,10 +5,21 @@ const COLORS = { dark: "#0b0b0c", light: "#fbfaf7" };
 
 class ThemeState {
   choice = $state<ThemeChoice>("dark");
+  #systemLight = $state(false);
+  #initialized = false;
+
+  get isLight() {
+    return this.choice === "light" || (this.choice === "system" && this.#systemLight);
+  }
 
   init() {
+    if (this.#initialized) return;
+    this.#initialized = true;
     const t = document.documentElement.dataset.theme;
     this.choice = t === "light" || t === "dark" ? t : "system";
+    const mq = matchMedia("(prefers-color-scheme: light)");
+    this.#systemLight = mq.matches;
+    mq.addEventListener("change", (e) => (this.#systemLight = e.matches));
   }
 
   #resolved(choice: ThemeChoice) {

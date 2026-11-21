@@ -49,9 +49,9 @@ bun run deploy     # build, then wrangler deploy
 `/assets/forum/*`, and the app updater follows `/update/latest.json` in `static/_redirects`.
 
 - `bun scripts/brand.ts` writes the logo, icons and favicons from the same geometry as the app's `LogoMark.svelte`.
-- `bun scripts/shots.ts <folder>` writes each screenshot at 1840, 1200 and 800 px from PNG captures named
-  `overview.png`, `tree.png` and so on.
-- `bun scripts/demo.ts <folder>` writes the hero frames to `static/assets/demo/` at 2560, 1840 and 1200 px from
+- `bun scripts/shots.ts <folder> [--light]` writes each screenshot at 1840, 1200 and 800 px from PNG captures named
+  `overview.png`, `tree.png` and so on (`--light` writes to `static/assets/shots/light/`).
+- `bun scripts/demo.ts <folder> [--light]` writes the hero frames to `static/assets/demo/` (or `demo/light/`) at 2560, 1840 and 1200 px from
   PNG captures named `follow-1.png`, `theory-1.png` and so on. Capture them from the app at 1520 x 960 with a
   device scale of 2. If a frame changes, check the click points and zoom boxes in `src/lib/demo.ts`.
 - `bun scripts/crops.ts <folder>` writes the `row-*` detail crops; the crop boxes are in the script.

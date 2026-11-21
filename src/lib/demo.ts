@@ -73,10 +73,13 @@ export const CHAPTERS: Chapter[] = [
 
 export const FRAMES = [...new Set(CHAPTERS.flatMap((c) => [c.start, ...c.steps.map((s) => s.frame)]))];
 
-export const frameSrc = (id: string) => ({
-  src: `/assets/demo/${id}-1840.webp`,
-  srcset: `/assets/demo/${id}-1200.webp 1200w, /assets/demo/${id}-1840.webp 1840w, /assets/demo/${id}.webp 2560w`,
-});
+export const frameSrc = (id: string, light = false) => {
+  const dir = light ? "/assets/demo/light" : "/assets/demo";
+  return {
+    src: `${dir}/${id}-1840.webp`,
+    srcset: `${dir}/${id}-1200.webp 1200w, ${dir}/${id}-1840.webp 1840w, ${dir}/${id}.webp 2560w`,
+  };
+};
 
 export interface Cam {
   s: number;

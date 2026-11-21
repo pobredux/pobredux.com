@@ -6,6 +6,7 @@
   import { SLIDES } from "#lib/content.js";
   import { APP_H, APP_W, CHAPTERS, FRAMES, TIMELINES, at, frameSrc, isDown } from "#lib/demo.js";
   import { release } from "#lib/release.svelte.js";
+  import { theme } from "#lib/theme.svelte.js";
 
   let { past = $bindable(false) }: { past?: boolean } = $props();
 
@@ -27,6 +28,8 @@
   let get: HTMLElement;
 
   const live = $derived(!reduce || started);
+  const light = $derived(theme.isLight);
+  const frameKey = (id: string) => `${light ? "l" : "d"}:${id}`;
   const tl = $derived(TIMELINES[chapter]);
   const shot = $derived(live ? at(tl, t) : null);
   const frame = $derived(shot?.frame ?? CHAPTERS[chapter].still);
@@ -76,7 +79,7 @@
       const dt = Math.min(now - last, 64);
       last = now;
       const s = at(TIMELINES[chapter], t);
-      if (ready[s.frame] && (!s.next || ready[s.next])) {
+      if (ready[frameKey(s.frame)] && (!s.next || ready[frameKey(s.next)])) {
         t += dt;
         if (t >= TIMELINES[chapter].duration) {
           t = 0;
@@ -88,11 +91,20 @@
     return () => cancelAnimationFrame(raf);
   });
 
+  $effect(() => {
+    void light;
+    if (!stage) return;
+    for (const img of stage.querySelectorAll<HTMLImageElement>("img[data-frame]")) {
+      if (img.complete && img.naturalWidth) ready[frameKey(img.dataset.frame!)] = true;
+    }
+  });
+
   onMount(() => {
+    theme.init();
     reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
     hidden = document.hidden;
     for (const img of stage.querySelectorAll<HTMLImageElement>("img[data-frame]")) {
-      if (img.complete && img.naturalWidth) ready[img.dataset.frame!] = true;
+      if (img.complete && img.naturalWidth) ready[frameKey(img.dataset.frame!)] = true;
     }
 
     const seeing = new IntersectionObserver(([e]) => (seen = e.isIntersecting), { threshold: 0.2 });
@@ -144,7 +156,7 @@
     <div class="window" role="img" aria-label={CHAPTERS[chapter].alt}>
       <div class="canvas" style:transform="translate({pct(cam.x)}, {pct(cam.y)}) scale({cam.s.toFixed(4)})">
         {#each FRAMES as id, i (id)}
-          {@const src = frameSrc(id)}
+          {@const src = frameSrc(id, light)}
           <img
             class="frame"
             class:on={id === frame}
@@ -158,7 +170,7 @@
             height="960"
             fetchpriority={i === 0 ? "high" : "auto"}
             decoding="async"
-            onload={() => (ready[id] = true)}
+            onload={() => (ready[frameKey(id)] = true)}
           />
         {/each}
       </div>
@@ -353,7 +365,7 @@
     aspect-ratio: 1520 / 960;
     overflow: hidden;
     border-radius: var(--r-window);
-    background: #0b0b0c;
+    background: var(--bg-0);
     box-shadow: var(--shadow-window);
     isolation: isolate;
   }
@@ -363,7 +375,7 @@
     inset: 0;
     z-index: 6;
     border-radius: inherit;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fg-0) 8%, transparent);
     pointer-events: none;
   }
   .canvas {
