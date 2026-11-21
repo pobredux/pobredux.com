@@ -219,7 +219,7 @@ void main() {
       const t = document.documentElement.dataset.theme;
       const light = t ? t === "light" : scheme.matches;
       gl!.uniform1f(uLight, light ? 1 : 0);
-      if (!raf && width > 0) draw();
+      if (width > 0 && height > 0) draw();
     }
 
     function tick(now: number) {
@@ -279,6 +279,7 @@ void main() {
     const themed = new MutationObserver(tone);
     themed.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
     scheme.addEventListener("change", tone);
+    addEventListener("pobredux:theme", tone);
 
     addEventListener("pointermove", move, { passive: true });
     document.documentElement.addEventListener("pointerleave", leave);
@@ -291,6 +292,7 @@ void main() {
       seeing.disconnect();
       themed.disconnect();
       scheme.removeEventListener("change", tone);
+      removeEventListener("pobredux:theme", tone);
       removeEventListener("pointermove", move);
       document.documentElement.removeEventListener("pointerleave", leave);
       document.removeEventListener("visibilitychange", sync);

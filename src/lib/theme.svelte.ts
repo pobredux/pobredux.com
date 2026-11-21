@@ -1,7 +1,21 @@
+import { flushSync } from "svelte";
+
 export type ThemeChoice = "system" | "light" | "dark";
 
 const KEY = "pobredux:theme";
 const COLORS = { dark: "#0b0b0c", light: "#fbfaf7" };
+
+function ready(img: HTMLImageElement | null) {
+  if (!img || !img.src) return Promise.resolve();
+  const wait = img.complete
+    ? img.decode().catch(() => {})
+    : new Promise<void>((res) => {
+        const done = () => img.decode().catch(() => {}).finally(res);
+        img.addEventListener("load", done, { once: true });
+        img.addEventListener("error", () => res(), { once: true });
+      });
+  return Promise.race([wait, new Promise<void>((res) => setTimeout(res, 200))]);
+}
 
 class ThemeState {
   choice = $state<ThemeChoice>("dark");
@@ -38,6 +52,7 @@ class ThemeState {
       m.content = COLORS[choice === "system" ? (m.media.includes("light") ? "light" : "dark") : choice];
     }
     this.choice = choice;
+    dispatchEvent(new Event("pobredux:theme"));
   }
 
   set(choice: ThemeChoice) {
@@ -48,7 +63,14 @@ class ThemeState {
       return;
     }
     document
-      .startViewTransition(() => this.#apply(choice))
+      .startViewTransition(async () => {
+        flushSync(() => this.#apply(choice));
+        const active =
+          document.querySelector<HTMLImageElement>("dialog.viewer[open] img") ??
+          document.querySelector<HTMLImageElement>(".hero img.frame.on");
+        await ready(active);
+        dispatchEvent(new Event("pobredux:theme"));
+      })
       .ready.then(dissolve)
       .catch(() => {});
   }

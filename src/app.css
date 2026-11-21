@@ -322,7 +322,7 @@ html:has(dialog[open]) {
   z-index: 1;
   mix-blend-mode: normal;
   filter: url(#theme-dissolve);
-  animation: 0.9s ease-in both theme-burn;
+  animation: 0.65s ease-in both theme-burn;
 }
 ::view-transition-new(root) {
   mix-blend-mode: normal;

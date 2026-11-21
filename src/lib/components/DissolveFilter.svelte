@@ -2,12 +2,12 @@
   <filter id="theme-dissolve" x="-15%" y="-15%" width="130%" height="130%" color-interpolation-filters="sRGB">
     <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed="7" result="noise" />
     <feDisplacementMap in="SourceGraphic" in2="noise" xChannelSelector="R" yChannelSelector="G" scale="0" result="displaced">
-      <animate attributeName="scale" values="0;90" dur="0.9s" begin="indefinite" fill="freeze" />
+      <animate attributeName="scale" values="0;75" dur="0.65s" begin="indefinite" fill="freeze" />
     </feDisplacementMap>
     <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0" result="alpha" />
     <feComponentTransfer in="alpha" result="mask">
-      <feFuncA type="linear" slope="16" intercept="1">
-        <animate attributeName="intercept" values="1;-16" dur="0.9s" begin="indefinite" fill="freeze" />
+      <feFuncA type="linear" slope="16" intercept="-2.5">
+        <animate attributeName="intercept" values="-2.5;-14.5" dur="0.65s" begin="indefinite" fill="freeze" />
       </feFuncA>
     </feComponentTransfer>
     <feComposite in="displaced" in2="mask" operator="in" />
