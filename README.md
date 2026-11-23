@@ -8,8 +8,7 @@ bun install
 bun run dev        # http://localhost:5173
 bun run check      # svelte-check, warnings fail
 bun run build      # writes dist/
-bun run preview    # wrangler dev on dist/, with _headers, _redirects and the 404 page
-bun run deploy     # build, then wrangler deploy
+bun run preview    # serve dist/ as the server does, with serve.json and the 404 page
 ```
 
 ## Layout
@@ -38,15 +37,16 @@ bun run deploy     # build, then wrangler deploy
   only System follows the operating system. A change
   runs in a view transition through the `#theme-dissolve` SVG filter, and switches instantly with reduced motion,
   without view transition support, or when the visible theme does not change.
-- `src/routes/404` prerenders with no JavaScript. Cloudflare serves it for unknown paths (`not_found_handling` in
-  `wrangler.jsonc`). `privacy` and `code-signing` use the same header as the home page.
+- `src/routes/404` prerenders with no JavaScript. `serve` answers unknown paths with it. `privacy` and
+  `code-signing` use the same header as the home page.
 - `html` reserves the scrollbar gutter (`scrollbar-gutter: stable`), so the header does not move between pages that
   scroll and pages that fit the window.
 
 ## Assets
 
 `static/` is copied into `dist/` as is. Keep these paths: the Path of Exile forum thread embeds
-`/assets/forum/*`, and the app updater follows `/update/latest.json` in `static/_redirects`.
+`/assets/forum/*`, and the app updater follows `/update/latest.json`, which `static/serve.json` redirects to the
+latest GitHub release. `serve.json` also sets the security and cache headers.
 
 - `bun scripts/brand.ts` writes the logo, icons and favicons from the same geometry as the app's `LogoMark.svelte`.
 - `bun scripts/shots.ts <folder> [--light]` writes each screenshot at 1840, 1200 and 800 px from PNG captures named
@@ -61,5 +61,6 @@ bun run deploy     # build, then wrangler deploy
 
 ## Hosting
 
-A Cloudflare Worker with static assets from `dist/`. The custom domain `pobredux.com` is attached to the Worker;
-`www` is a proxied placeholder record with a zone redirect rule to the root.
+Coolify on our own server deploys every push to `main`. It runs `bun run build`, then `bunx serve dist -l 3000`.
+`serve` reads `dist/serve.json`, which comes from `static/serve.json`. Cloudflare proxies `pobredux.com` to the
+server, and `www` redirects to the root.
